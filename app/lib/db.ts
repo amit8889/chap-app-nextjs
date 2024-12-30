@@ -1,4 +1,4 @@
-import { Pool } from 'pg';
+import { Pool,QueryResultRow } from 'pg';
 import fs from 'fs';
 import path from 'path';
 
@@ -67,7 +67,7 @@ class Database {
 
   // Public method to execute a query
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  public async executeQuery<T>(queryText: string, params?: any[]): Promise<T[]> {
+  public async executeQuery<T extends QueryResultRow>(queryText: string, params?: any[]): Promise<T[]> {
     await this.initializePool();
     if (!this.pool) {
       throw new Error("Database pool not initialized");
@@ -95,6 +95,6 @@ class Database {
 // Export a single function to execute queries
 const database = Database.getInstance();
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export const executeQuery = async <T>(queryText: string, params?: any[]): Promise<T[]> => {
+export const executeQuery = async <T extends QueryResultRow>(queryText: string, params?: any[]): Promise<T[]> => {
   return await database.executeQuery(queryText, params);
 };
