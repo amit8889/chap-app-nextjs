@@ -4,13 +4,15 @@
   "type": "module",
   "private": true,
  "scripts": {
-  "dev": "node --loader ts-node/esm server.ts",
-  "prod": "npm run compile && npm run build && npm run start && npm run start-server",
+  "dev":"next dev",
+  "dev:socket": "node --loader ts-node/esm server.mts",
   "compile": "tsc",
   "build": "next build",
   "start": "next start",
   "start-server": "node dist/server.js",
-  "lint": "next lint"
+  "lint": "next lint",
+  "build:socket":"next build && tsc --project tsconfig.server.json",
+  "start:socket": "node dist/server.mjs"
 },
   "dependencies": {
     "@types/socket.io": "^3.0.2",

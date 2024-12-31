@@ -1,12 +1,12 @@
-'use client'
+'use client';
 
 import { useEffect, useState } from 'react';
-import { io } from 'socket.io-client';
+import { io, Socket } from 'socket.io-client';
 
-const socket = io();
+const socket: Socket = io()
 
 interface MessageParams {
-  me: boolean; 
+  me: boolean;
   text: string;
 }
 
@@ -20,49 +20,46 @@ const useSocket = (roomId: string) => {
       return;
     }
 
+    // Event listeners
     socket.on('joinRoom', () => {
       setIsConnected(true);
       setConnectionError(null);
       console.log('Socket connected!');
     });
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    socket.on('connect_error', (error: any) => {
+
+    socket.on('connect_error', (error: { message: string }) => {
       setIsConnected(false);
       setConnectionError(`Connection error: ${error.message}`);
-      //console.error('Socket connection error:', error);
+      console.error('Socket connection error:', error);
     });
 
     socket.on('disconnect', (reason: string) => {
       setIsConnected(false);
       setConnectionError(`Disconnected: ${reason}`);
-      //console.log(`Disconnected: ${reason}`);
+      console.log(`Disconnected: ${reason}`);
     });
-      console.log("=========>one time")
 
     socket.emit('joinRoom', roomId);
 
-    // Listen for incoming messages
     socket.on('message', (message: string) => {
-      console.log("messsage come :==>",message)
+      console.log("Message received: ", message);
       setMessages((prevMessages) => [
         ...prevMessages,
         { me: false, text: message },
       ]);
     });
 
-    // Cleanup socket listeners on component unmount
     return () => {
       socket.off('connect');
       socket.off('connect_error');
       socket.off('disconnect');
       socket.off('message');
       socket.emit('leaveRoom', roomId);
-     // socket.off('ping')
     };
   }, [roomId]);
 
-  // Send a message to the room
+  
   const sendMessage = (message: string) => {
     if (!isConnected) {
       return; 
@@ -73,6 +70,7 @@ const useSocket = (roomId: string) => {
       roomId,
     });
   };
+
   return { isConnected, connectionError, messages, sendMessage };
 };
 

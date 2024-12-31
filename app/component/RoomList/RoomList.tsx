@@ -1,18 +1,18 @@
-"use client";
+'use client';
 
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import RoomCard from "../RoomCard/RoomCard"; // Adjust path if needed
 import Link from "next/link";
 
-// Room interface
+
 interface Room {
   id: number;
   name: string;
   description: string;
 }
 
-// Skeleton Loader for Card (Placeholder)
+
 const SkeletonLoader = () => (
   <div className="space-y-4 p-4 border border-gray-300 rounded-lg animate-pulse">
     <div className="h-6 bg-gray-200 rounded w-3/4"></div>
@@ -20,28 +20,31 @@ const SkeletonLoader = () => (
   </div>
 );
 
-const RoomList = () => {
-  const [rooms, setRooms] = useState<Room[]>([]);
-  const [loading, setLoading] = useState(true);
+const RoomList: React.FC = () => {
+
+  const [rooms, setRooms] = useState<Room[]>([]); 
+  const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
+
   useEffect(() => {
+
     const fetchRooms = async () => {
       try {
-        const response = await axios.get("/api/rooms", {
+        const response = await axios.get<{ data: Room[] }>("/api/rooms", {
           headers: {
             "Cache-Control": "no-store",
           },
         });
         setRooms(response.data?.data || []);
       } catch (error) {
-        setError("Failed to load rooms. Please try again later.");
+        setError("Failed to load rooms. Please try again later."); 
       } finally {
-        setLoading(false);
+        setLoading(false); 
       }
     };
 
-    fetchRooms();
-  }, []);
+    fetchRooms(); 
+  }, []); 
 
   if (error) {
     return (
@@ -52,7 +55,7 @@ const RoomList = () => {
   }
 
   return (
-    <div className="max-w-6xl mx-auto p-6">
+    <div className="max-w-6xl mx-auto">
       <div className="grid grid-cols-1 pt-4 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         {loading ? (
           Array(3)

@@ -1,20 +1,17 @@
 {
   "compilerOptions": {
-    "outDir": "./dist",
-    "rootDir": "./",
     "target": "ES2017",
     "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
-    
     "skipLibCheck": true,
     "strict": true,
-    "noEmit": true,  // Ensures TypeScript doesn't emit any files
+    "noEmit": true, 
     "esModuleInterop": true,
     "module": "esnext",
-    "moduleResolution": "bundler",
+    "moduleResolution": "Node",
     "resolveJsonModule": true,
     "isolatedModules": true,
-    "jsx": "preserve",  // Preserve JSX for Next.js processing
+    "jsx": "preserve",
     "incremental": true,
     "plugins": [
       {
@@ -22,18 +19,16 @@
       }
     ],
     "paths": {
-      "@/*": ["./*"]  // Path alias for absolute imports (e.g., '@/components')
+      "@/*": ["./*"] 
     }
   },
   "include": [
-    "next-env.d.ts",  // Essential for Next.js TypeScript setup
-    "**/*.ts",  // Include all TypeScript files (.ts)
-    "**/*.tsx", // Include all TypeScript JSX files (.tsx)
-    ".next/types/**/*.ts",
-    "server.ts",   // Include your server.ts file
-    "other-folder/*.ts"
+    "next-env.d.ts",  
+    "**/*.ts",  
+    "**/*.tsx",
+    ".next/types/**/*.ts"
   ],
   "exclude": [
-    "node_modules"  // Exclude the node_modules directory from being processed
+    "node_modules"  
   ]
 }

@@ -3,9 +3,9 @@ import fs from 'fs';
 import path from 'path';
 
 class Database {
-  private static instance: Database | null = null; // Singleton instance
+  private static instance: Database | null = null;
   private pool: Pool | null = null; 
-  private tablesCreated = false; // Ensures tables are created only once
+  private tablesCreated:boolean = false;
 
   private constructor() {}
 
@@ -40,7 +40,6 @@ class Database {
 
       console.log("=== Connection pool initialized ===");
 
-      // Create tables after initializing the pool
       if (!this.tablesCreated) {
         await this.createTables();
       }
@@ -82,7 +81,7 @@ class Database {
     }
   }
 
-  // Public method to close the pool (useful during application shutdown)
+
   public async close(): Promise<void> {
     if (this.pool) {
       await this.pool.end();
@@ -92,7 +91,7 @@ class Database {
   }
 }
 
-// Export a single function to execute queries
+
 const database = Database.getInstance();
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const executeQuery = async <T extends QueryResultRow>(queryText: string, params?: any[]): Promise<T[]> => {

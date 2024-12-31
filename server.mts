@@ -5,7 +5,7 @@ import { Server, Socket } from "socket.io";
 
 const dev: boolean = process.env.NODE_ENV !== "production";
 const hostname: string = "localhost";
-const port: number = 3001;
+const port: number = 3000;
 
 // Create Next.js app
 const app = next({ dev, hostname, port });
@@ -19,7 +19,7 @@ app.prepare().then(() => {
   const io = new Server(httpServer);
 
   io.on("connection", (socket: Socket) => {
-    console.log("socket connected : =======>", socket.id);
+    //console.log("socket connected : =======>", socket.id);
 
     socket.on("joinRoom", (roomId: string) => {
       socket.join(roomId);
@@ -27,7 +27,7 @@ app.prepare().then(() => {
     });
 
     socket.on("message", (message: { roomId: string; text: string }) => {
-      console.log("message : ", message);
+     // console.log("message : ", message);
       const { roomId, text } = message;
       if (roomId) {
         socket.to(roomId).emit("message", text);

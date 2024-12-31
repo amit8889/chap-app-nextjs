@@ -1,12 +1,10 @@
-
-'use client'
+'use client';
 
 import React from 'react';
-import RoomList from '../component/RoomList/RoomList'; // Adjust path if needed
+import RoomList from '../component/RoomList/RoomList';
 import Link from 'next/link';
 
-
-const AdminDashboard  = () => {
+const AdminDashboard: React.FC = () => {
   return (
     <div className="w-full min-h-[92vh] bg-gradient-to-r from-blue-50 to-blue-100">
       <div className="max-w-6xl mx-auto p-6 min-h-[92vh] bg-white rounded-lg shadow-lg">

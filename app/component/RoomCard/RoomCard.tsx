@@ -1,6 +1,7 @@
 // /components/Room/RoomCard.tsx
 import React from 'react';
 import Link from "next/link"
+
 interface RoomCardProps {
   name: string;
   description: string;
@@ -9,7 +10,7 @@ interface RoomCardProps {
 
 const RoomCard: React.FC<RoomCardProps> = ({ name, description,roomId }) => {
   return (
-    <div className="bg-white p-6 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 mb-6 max-w-xs w-full mx-auto hover:scale-105 hover:bg-blue-50">
+    <div className="bg-white p-2 sm:p-6 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 mb-6 max-w-xs w-full mx-auto hover:scale-105 hover:bg-blue-50">
     <div className="flex flex-col space-y-4">
       <h3 className="text-2xl font-semibold text-gray-800 truncate">{name}</h3>
       <p className="text-gray-600 text-base line-clamp-3">{description}</p>

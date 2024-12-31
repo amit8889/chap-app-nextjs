@@ -1,7 +1,7 @@
-"use client";
+'use client';
 
 import React, { useState } from "react";
-import axios,{AxiosError} from "axios";
+import axios, { AxiosError } from "axios";
 import { useRouter } from "next/navigation";
 
 interface RoomForm {
@@ -20,6 +20,7 @@ const AddRoom: React.FC = () => {
     name: "",
     description: "",
   });
+
   const [status, setStatus] = useState<FormStatus>({
     loading: false,
     error: null,
@@ -39,9 +40,9 @@ const AddRoom: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (status.loading) return; // Prevent duplicate submissions
+    if (status.loading) return; 
 
-    setStatus({ loading: true, error: null, success: null }); // Reset status on submission
+    setStatus({ loading: true, error: null, success: null }); 
 
     try {
       const response = await axios.post("/api/rooms", formData, {
@@ -56,7 +57,7 @@ const AddRoom: React.FC = () => {
           error: null,
           success: "Room added successfully!",
         });
-        setFormData({ name: "", description: "" }); // Reset form fields
+        setFormData({ name: "", description: "" });
         router.push("/admin");
       }
     } catch (err: unknown) {
