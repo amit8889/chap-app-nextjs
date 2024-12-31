@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import axios from "axios";
+import axios,{AxiosError} from "axios";
 import { useRouter } from "next/navigation";
 
 interface RoomForm {
@@ -60,7 +60,7 @@ const AddRoom: React.FC = () => {
         router.push("/admin");
       }
     } catch (err: unknown) {
-      if (err instanceof Error) {
+      if (err instanceof AxiosError) {
         setStatus({
           loading: false,
           error:

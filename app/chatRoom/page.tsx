@@ -1,36 +1,29 @@
 'use client'
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState ,useMemo,Suspense} from 'react';
 import { useSearchParams } from 'next/navigation'
 import useSocket from './socket';
-
-interface RoomDataParams {
-  roomName: string;
-  roomID: string;
-}
+import { useRouter } from "next/navigation";
 
 const ChatRoom = () => {
-  const searchParams = useSearchParams()
-  const [roomData, setRoomData] = useState<RoomDataParams | null>(null);
-  const { isConnected, connectionError, messages, sendMessage } = useSocket(roomData?.roomID ?? '');
+
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const roomName: string | null = searchParams.get('roomName') || null;
+  const roomId:string | null = searchParams.get('roomId') as string || null;
+  const { isConnected, connectionError, messages, sendMessage } = useSocket(roomId ?? '');
   const [message, setMessage] = useState<string>('');
 
-  // Extract room data from query parameters when router.query is available
-  useEffect(() => {
-    const roomId = searchParams.get('roomId');
-    const roomName = searchParams.get('roomName');
-    if (roomId && roomName) {
-      setRoomData({
-        roomID: roomId,
-        roomName: roomName
-      });
+ useEffect(() => {
+    if (!roomName || !roomId) {
+      router.push("/"); 
     }
-  }, [searchParams]);
+  }, [roomName, roomId,router]);
 
   const handleSendMessage = () => {
     if (message.trim()) {
-      sendMessage(message);  // Send message via socket
-      setMessage('');  // Clear message input after sending
+      sendMessage(message);  
+      setMessage(''); 
     }
   };
 
@@ -39,7 +32,7 @@ const ChatRoom = () => {
   };
   return (
     <div className="chat-room max-w-3xl mx-auto p-6 bg-white rounded-xl shadow-lg space-y-6">
-      <h1 className="text-3xl font-semibold text-gray-800">Chat Room: {roomData?.roomName || "N/A"}</h1>
+      <h1 className="text-3xl font-semibold text-gray-800">Chat Room: {roomName || "N/A"}</h1>
 
       <div>
         {(!isConnected || connectionError) ? (
@@ -87,4 +80,11 @@ const ChatRoom = () => {
   );
 };
 
-export default ChatRoom;
+const SuspenseChatRoom = ()=>{
+  return (
+    <Suspense>
+      <ChatRoom />
+    </Suspense>
+  )
+}
+export default SuspenseChatRoom;
