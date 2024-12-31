@@ -20,7 +20,7 @@ const useSocket = (roomId: string) => {
       return;
     }
 
-    socket.on('connect', () => {
+    socket.on('joinRoom', () => {
       setIsConnected(true);
       setConnectionError(null);
       console.log('Socket connected!');
@@ -38,11 +38,13 @@ const useSocket = (roomId: string) => {
       setConnectionError(`Disconnected: ${reason}`);
       //console.log(`Disconnected: ${reason}`);
     });
+      console.log("=========>one time")
 
     socket.emit('joinRoom', roomId);
 
     // Listen for incoming messages
     socket.on('message', (message: string) => {
+      console.log("messsage come :==>",message)
       setMessages((prevMessages) => [
         ...prevMessages,
         { me: false, text: message },
@@ -56,6 +58,7 @@ const useSocket = (roomId: string) => {
       socket.off('disconnect');
       socket.off('message');
       socket.emit('leaveRoom', roomId);
+     // socket.off('ping')
     };
   }, [roomId]);
 
@@ -65,7 +68,10 @@ const useSocket = (roomId: string) => {
       return; 
     }
     setMessages((prevMessages) => [...prevMessages, { me: true, text: message }]);
-    socket.emit('message', message);
+    socket.emit('message', {
+      text: message,
+      roomId,
+    });
   };
   return { isConnected, connectionError, messages, sendMessage };
 };

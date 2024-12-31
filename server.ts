@@ -1,41 +1,54 @@
-// import { createServer, IncomingMessage, ServerResponse } from 'http';
-// import next from 'next';
-// import socketIo from 'socket.io';
+import { createServer, IncomingMessage, ServerResponse } from "node:http";
+import next from "next";
+import { Server, Socket } from "socket.io";
 
-// // Set up environment variables
-// const dev = process.env.NODE_ENV !== 'production';
-// const app = next({ dev });
-// const handle = app.getRequestHandler();
 
-// // Prepare Next.js app
-// app.prepare().then(() => {
-//   // Create HTTP server
-//   const server = createServer((req: IncomingMessage, res: ServerResponse) => {
-//     handle(req, res);
-//   });
+const dev: boolean = process.env.NODE_ENV !== "production";
+const hostname: string = "localhost";
+const port: number = 3001;
 
-//   // Create Socket.IO instance attached to the server
-//   const io = socketIo(server);
+// Create Next.js app
+const app = next({ dev, hostname, port });
+const handler = app.getRequestHandler();
 
-//   // Listen for connection events from clients
-//   io.on('connection', (socket: socketIo.Socket) => {
-//     console.log('A user connected');
+app.prepare().then(() => {
+  const httpServer = createServer((req: IncomingMessage, res: ServerResponse) => {
+    handler(req, res);
+  });
 
-//     // Listen for messages from clients and broadcast to all clients
-//     socket.on('send_message', (message: string) => {
-//       console.log('Message received:', message);
-//       io.emit('receive_message', message); // Emit to all connected clients
-//     });
+  const io = new Server(httpServer);
 
-//     // Handle user disconnect
-//     socket.on('disconnect', () => {
-//       console.log('User disconnected');
-//     });
-//   });
+  io.on("connection", (socket: Socket) => {
+    console.log("socket connected : =======>", socket.id);
 
-//   // Start server listening on port 3001
-//   server.listen(3001, (err?: Error) => {
-//     if (err) throw err;
-//     console.log('> Ready on http://localhost:3001');
-//   });
-// });
+    socket.on("joinRoom", (roomId: string) => {
+      socket.join(roomId);
+      socket.emit("joinRoom", "");
+    });
+
+    socket.on("message", (message: { roomId: string; text: string }) => {
+      console.log("message : ", message);
+      const { roomId, text } = message;
+      if (roomId) {
+        socket.to(roomId).emit("message", text);
+      }
+    });
+
+    socket.on("leaveRoom", (roomId: string) => {
+      socket.leave(roomId);
+    });
+
+    socket.on("disconnect", () => {
+      console.log("socket disconnected : =======>", socket.id);
+    });
+  });
+
+  httpServer
+    .once("error", (err: Error) => {
+      console.error(err);
+      process.exit(1);
+    })
+    .listen(port, () => {
+      console.log(`> Ready on http://${hostname}:${port}`);
+    });
+});
