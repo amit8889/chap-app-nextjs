@@ -3,22 +3,19 @@ import Link from 'next/link';
 import Image from 'next/image'
 const Navbar = () => {
   return (
-    <nav className=" sm:px-40 bg-blue-500 p-4 shadow-md">
+    <nav className="sm:px-40 bg-blue-500 p-4 shadow-md sticky top-0 z-10">
       <div className="max-w-7xl mx-auto flex justify-between items-center">
-        {/* Logo (optional) */}
         <div className="text-white text-lg font-semibold flex items-center gap-2">
           <Link href="/">
             <Image
-              src="/logo.png" // Path to your logo image in the /public directory
+              src="/logo.png"
               alt="Logo"
-              width={32} // Set the width of the image (adjust to your preference)
-              height={32} // Set the height of the image (adjust to your preference)
+              width={32} 
+              height={32} 
               className="object-contain"
             />
           </Link>
         </div>
-        
-        {/* Links */}
         <ul className="flex gap-6 text-white">
           <li>
             <Link href="/">Home</Link>

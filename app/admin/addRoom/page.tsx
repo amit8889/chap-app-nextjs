@@ -1,8 +1,8 @@
-'use client';
+"use client";
 
-import React, { useState } from 'react';
-import axios from 'axios';
-import { useRouter } from 'next/navigation';
+import React, { useState } from "react";
+import axios from "axios";
+import { useRouter } from "next/navigation";
 
 interface RoomForm {
   name: string;
@@ -17,8 +17,8 @@ interface FormStatus {
 
 const AddRoom: React.FC = () => {
   const [formData, setFormData] = useState<RoomForm>({
-    name: '',
-    description: '',
+    name: "",
+    description: "",
   });
   const [status, setStatus] = useState<FormStatus>({
     loading: false,
@@ -44,32 +44,38 @@ const AddRoom: React.FC = () => {
     setStatus({ loading: true, error: null, success: null }); // Reset status on submission
 
     try {
-      const response = await axios.post('http://localhost:3000/api/rooms', formData, {
+      const response = await axios.post("/api/rooms", formData, {
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
       });
-    
+
       if (response.status === 200) {
-        setStatus({ loading: false, error: null, success: 'Room added successfully!' });
-        setFormData({ name: '', description: '' }); // Reset form fields
-        router.push('/admin'); // Redirect to the admin page
+        setStatus({
+          loading: false,
+          error: null,
+          success: "Room added successfully!",
+        });
+        setFormData({ name: "", description: "" }); // Reset form fields
+        router.push("/admin");
       }
     } catch (err: unknown) {
-     // setStatus({ loading: false, error: null, success: null });
-      
       if (err instanceof Error) {
-        // If err is an instance of Error (for example, a network error)
-        setStatus({ loading: false, error: err.message || 'Something went wrong. Please try again.', success: null });
-      } else if (axios.isAxiosError(err)) {
-        // If it's an Axios error (this checks if the error is from Axios specifically)
-        setStatus({ loading: false, error: err.response?.data?.message || 'Something went wrong. Please try again.', success: null });
+        setStatus({
+          loading: false,
+          error:
+            err.response?.data?.message ||
+            "Something went wrong. Please try again.",
+          success: null,
+        });
       } else {
-        // Handle any other unexpected errors
-        setStatus({ loading: false, error: 'An unknown error occurred. Please try again.', success: null });
+        setStatus({
+          loading: false,
+          error: "An unknown error occurred. Please try again.",
+          success: null,
+        });
       }
     }
-    
   };
 
   return (
@@ -80,7 +86,9 @@ const AddRoom: React.FC = () => {
         {status.error && <p className="text-red-500">{status.error}</p>}
 
         <div>
-          <label htmlFor="name" className="block text-sm font-medium">Room Name</label>
+          <label htmlFor="name" className="block text-sm font-medium">
+            Room Name
+          </label>
           <input
             id="name"
             name="name"
@@ -93,7 +101,9 @@ const AddRoom: React.FC = () => {
         </div>
 
         <div>
-          <label htmlFor="description" className="block text-sm font-medium">Room Description</label>
+          <label htmlFor="description" className="block text-sm font-medium">
+            Room Description
+          </label>
           <input
             id="description"
             name="description"
@@ -108,9 +118,11 @@ const AddRoom: React.FC = () => {
         <button
           type="submit"
           disabled={status.loading}
-          className={`mt-4 w-full p-2 bg-blue-500 text-white rounded-md ${status.loading ? 'opacity-50' : ''}`}
+          className={`mt-4 w-full p-2 bg-blue-500 text-white rounded-md ${
+            status.loading ? "opacity-50" : ""
+          }`}
         >
-          {status.loading ? 'Adding...' : 'Add Room'}
+          {status.loading ? "Adding..." : "Add Room"}
         </button>
       </form>
     </div>
