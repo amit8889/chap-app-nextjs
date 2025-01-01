@@ -3,8 +3,11 @@
 import React from 'react';
 import RoomList from '../component/RoomList/RoomList';
 import Link from 'next/link';
-
+import useAuthRedirect from "../hooks/useAuthHook.ts"
 const AdminDashboard: React.FC = () => {
+  const {session, status} = useAuthRedirect()
+  console.log(session)
+  console.log(status)
   return (
     <div className="w-full min-h-[92vh] bg-gradient-to-r from-blue-50 to-blue-100">
       <div className="max-w-6xl mx-auto p-6 min-h-[92vh] bg-white rounded-lg shadow-lg">

@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import axios, { AxiosError } from "axios";
 import { useRouter } from "next/navigation";
+import useAuthRedirect from "../../hooks/useAuthHook.ts"
 
 interface RoomForm {
   name: string;
@@ -16,6 +17,7 @@ interface FormStatus {
 }
 
 const AddRoom: React.FC = () => {
+  const {session} = useAuthRedirect()
   const [formData, setFormData] = useState<RoomForm>({
     name: "",
     description: "",

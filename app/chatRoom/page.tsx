@@ -4,7 +4,7 @@ import { useEffect, useState, useRef,Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import useSocket from './socket';
 import { useRouter } from 'next/navigation';
-
+import useAuthRedirect from "../hooks/useAuthHook.ts"
 interface Message {
   text: string;
   me: boolean;
@@ -12,12 +12,14 @@ interface Message {
 
 const ChatRoom = () => {
   const router = useRouter();
+
+   const {session} = useAuthRedirect()
   const searchParams = useSearchParams();
 
   const roomName: string | null = searchParams.get('roomName') || null;
   const roomId: string | null = searchParams.get('roomId') as string || null;
 
-  const { isConnected, connectionError, messages, sendMessage } = useSocket(roomId ?? '');
+  const { isConnected, connectionError, messages, sendMessage } = useSocket(roomId ?? '',session?.accessToken);
   const [message, setMessage] = useState<string>('');
 
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
@@ -33,11 +35,15 @@ const ChatRoom = () => {
       messagesEndRef.current.scrollIntoView({ behavior: 'smooth' });
     }
   }, [messages]);
+  if(!session){
+    router.push('/')
+    return;
+  }
 
   const handleSendMessage = (e: React.FormEvent) => {
     e.preventDefault();
     if (message.trim()) {
-      sendMessage(message);
+      sendMessage(message,session?.user?.email,session?.user?.name);
       setMessage('');
     }
   };
@@ -65,14 +71,23 @@ const ChatRoom = () => {
       </div>
 
       <div className="messages flex-grow overflow-y-auto mb-4 space-y-2">
-        {messages.map((msg, index) => (
-          <div
-            key={index}
-            className={`message p-3 rounded-lg ${msg.me ? 'bg-blue-500 text-white ml-auto' : 'bg-gray-100 text-gray-700'}`}
-          >
-            <p>{msg.text}</p>
-          </div>
-        ))}
+      {messages.map((msg, index) => (
+  msg?.mt && msg.mt === "message" ? (
+    <div
+      key={index}
+      className={`message p-3 rounded-lg ${msg.email && msg.email == session?.user?.email? 'bg-blue-500 text-white ml-auto' : 'bg-gray-100 text-gray-700'}`}
+    >
+      <p>msg: {msg.text}</p>
+    </div>
+  ) : (
+    <div key={index}>
+      <div className="message  rounded-lg text-red-700">
+        <p>INFO : {msg.text}</p>
+      </div>
+    </div>
+  )
+))}
+
         <div ref={messagesEndRef} />
       </div>
 
