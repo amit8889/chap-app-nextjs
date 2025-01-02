@@ -3,9 +3,9 @@ import next from "next";
 import { Server, Socket } from "socket.io";
 import { createRequire } from 'module';
 import jwt from 'jsonwebtoken';
-import { addMessage } from "./app/api/message/queries";
 import {SocketUser} from "./app/types/User"
 import {Messages} from "./app/types/Messages"
+import { EventEmitter } from 'events';
 
 declare module 'socket.io' {
   interface Socket {
@@ -27,6 +27,8 @@ app.prepare().then(() => {
   });
 
   const io = new Server(httpServer);
+
+  globalThis.eventEmitter = new EventEmitter();
 
   io.use((socket: Socket, next) => {
     const { token, roomId } = socket.handshake.query;
@@ -91,7 +93,7 @@ app.prepare().then(() => {
         image:image,
         name:name
       }
-      // addMessage({roomId:roomId as string, text:text,email:email})
+     globalThis.eventEmitter.emit("addToDb",msg)
       if (roomId) {
         socket.to(roomId).emit("message", msg);
       }

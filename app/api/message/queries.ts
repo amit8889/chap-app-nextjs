@@ -21,3 +21,13 @@ export async function getAllMessages(roomId: string): Promise<Messages[]> {
     );
     return result;
 }
+
+globalThis.eventEmitter?.on("addToDb",async(msg:Messages)=>{
+    try {
+       console.log("===message  save to db===")
+       await addMessage(msg)
+       console.log("===message successfully save to db")
+    } catch (error) {
+        console.log("error in db entry :",error)
+    }
+  })

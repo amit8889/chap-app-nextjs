@@ -15,7 +15,7 @@
       "noUnusedParameters": false     
     },
     
-      "include": ["./app", "./server.ts"]
+      "include": ["types/global.d.ts", "./server.ts"]
     ,
     "exclude": [
       "node_modules"     
