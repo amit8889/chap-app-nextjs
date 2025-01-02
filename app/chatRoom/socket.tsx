@@ -16,7 +16,8 @@ const useSocket = (roomId: string,token: string | undefined) => {
       return;
     }
     // connsct socket
-    socket = io('http://localhost:3000', {
+    const socketUrl = process.env.NEXTAUTH_URL ?? 'http://localhost:3000'
+    socket = io(socketUrl, {
       reconnection: false, 
       query: {
         token: token,
