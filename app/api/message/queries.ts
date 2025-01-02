@@ -19,7 +19,8 @@ export async function getAllMessages(roomId: string): Promise<Messages[]> {
         `SELECT text,name,cd,email,roomid,image FROM messages WHERE roomid = $1 ORDER BY id DESC LIMIT 50`,
         [roomId]
     );
-    return result;
+    // reverse
+    return result.reverse();
 }
 
 globalThis.eventEmitter?.on("addToDb",async(msg:Messages)=>{
