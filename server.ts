@@ -62,7 +62,6 @@ app.prepare().then(() => {
         mt: "notification",
         roomId:roomId as string
       }
-      socket.emit("disconnect", "Invalid token");
       socket.to(roomId).emit("message", msg);
 
 

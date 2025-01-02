@@ -89,7 +89,7 @@ const ChatRoom = () => {
 
       <div className="messages flex-grow overflow-y-auto mb-4 space-y-4 p-4 bg-gray-50 rounded-lg shadow-lg">
   {messages.map((msg, index) =>
-    msg?.mt && msg.mt === "message" ? (
+    (!msg?.mt ||  msg.mt === "message" )? (
       <div
         key={index}
         className={`message p-4 rounded-lg shadow-md ${

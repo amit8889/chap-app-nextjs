@@ -1,26 +1,22 @@
 import { executeQuery } from "../../lib/db";
-// import { Messages } from "../../types/message"; 
+ import { Messages } from "../../types/Messages"; 
 
-export interface Messages {
-    id?:string,
-    text: string;
-    name: string;
-    cd?: Date; // Optional field
-    mt?: string; // Optional field (could be 'msg', 'notification', etc.)
-    email?: string; // Optional, for email of the sender
-    roomId:string
-  }
-export async function addMessage(params: Messages) {
+
+  export async function addMessage(params: Messages) {
+    if (!params.roomId || !params.text || !params.email || !params.name) {
+        throw new Error("Missing required parameters: roomId, text, email, or name");
+    }
+
     await executeQuery(
-        `INSERT INTO "messages" ("roomId", "text", "email", "cd") 
-        VALUES ($1, $2, $3, $4)`,
-        [params.roomId, params.text, params.email, params.cd || new Date()]  
+        `INSERT INTO "messages" ("roomid", "text", "email", "name", "image") 
+        VALUES ($1, $2, $3, $4, $5)`,
+        [params.roomId, params.text, params.email, params.name, params.image ?? ""]
     );
 }
 
 export async function getAllMessages(roomId: string): Promise<Messages[]> {
     const result: Messages[] = await executeQuery(
-        `SELECT * FROM messages WHERE "roomId" = $1 ORDER BY id DESC LIMIT 50`,
+        `SELECT text,name,cd,email,roomid,image FROM messages WHERE roomid = $1 ORDER BY id DESC LIMIT 50`,
         [roomId]
     );
     return result;

@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import { io, Socket } from 'socket.io-client';
 import {Messages} from "../types/Messages"
-
+import {fetchRooms}  from "./network"
 let socket: Socket | null = null;
 
 const useSocket = (roomId: string,token: string | undefined) => {
@@ -15,6 +15,12 @@ const useSocket = (roomId: string,token: string | undefined) => {
     if (!roomId || !token) {
       return;
     }
+    fetchRooms(roomId).then((data=>{
+      setMessages([...data,...messages])
+      console.log(data)
+    })).catch((error)=>{
+      
+    })
     // connsct socket
     socket = io('http://localhost:3000', {
       reconnection: false, 
