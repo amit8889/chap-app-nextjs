@@ -1,19 +1,24 @@
-import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
-import "./globals.css";
-import Navbar from "./component/Navbar/Navbar";
 
+
+import { ReactNode } from "react";
+import Navbar from "./component/Navbar/Navbar";
+import SessionWrapper from "./component/SessionWrapper/SessionWrapper";
+import "./globals.css";
+
+// Directly typing the props in the function definition
 export default function RootLayout({
   children,
 }: {
-  children: React.ReactNode;
+  children: ReactNode;
 }) {
   return (
     <html lang="en">
-      <body>
-        <Navbar />
-        {children}
-      </body>
+      <SessionWrapper>
+        <body>
+          <Navbar />
+          {children}
+        </body>
+      </SessionWrapper>
     </html>
   );
 }

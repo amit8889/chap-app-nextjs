@@ -1,8 +1,9 @@
 'use client';
 
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import axios, { AxiosError } from "axios";
 import { useRouter } from "next/navigation";
+import useAuthRedirect from "../../hooks/useAuthHook"
 
 interface RoomForm {
   name: string;
@@ -16,6 +17,8 @@ interface FormStatus {
 }
 
 const AddRoom: React.FC = () => {
+  const {session} = useAuthRedirect()
+  
   const [formData, setFormData] = useState<RoomForm>({
     name: "",
     description: "",
@@ -28,6 +31,11 @@ const AddRoom: React.FC = () => {
   });
 
   const router = useRouter();
+  useEffect(() => {
+    if (!session) {
+      router.push("/");
+    }
+  }, [session, router]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
