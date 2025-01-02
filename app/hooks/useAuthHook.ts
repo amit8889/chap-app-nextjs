@@ -11,6 +11,7 @@ const useAuthRedirect = () => {
   useEffect(() => {
     if (!session) {
       router.push('/login');
+      return;
     }
   }, [session, status, router]);
 

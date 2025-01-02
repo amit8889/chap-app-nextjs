@@ -5,18 +5,7 @@ import { createRequire } from 'module';
 import jwt from 'jsonwebtoken';
 import { addMessage } from "./app/api/message/queries";
 import {SocketUser} from "./app/types/User"
-
-
-export interface Messages {
-  text: string;
-  name?: string;
-  cd?: Date;
-  mt?: string; 
-  email?: string;
-  roomId?:string;
-  image?:string;
-}
-
+import {Messages} from "./app/types/Messages"
 
 declare module 'socket.io' {
   interface Socket {
@@ -116,8 +105,6 @@ app.prepare().then(() => {
         mt: "notification",
         roomId:roomId as string,
       }
-
-      // Optionally notify room users when a user disconnects
       socket.to(roomId).emit("message", msg);
     });
   });

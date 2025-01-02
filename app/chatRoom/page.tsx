@@ -7,6 +7,7 @@ import { useRouter } from "next/navigation";
 import useAuthRedirect from "../hooks/useAuthHook";
 import Image from 'next/image'
 import { Session } from "next-auth";
+import {fetchRooms} from './network'
 interface CustomSession extends Session {
   accessToken: string;
 }
@@ -21,7 +22,7 @@ const ChatRoom = () => {
   const roomId: string | null = (searchParams.get("roomId") as string) || null;
   const accessToken: string = (session as CustomSession)?.accessToken ?? "";
 
-  const { isConnected, connectionError, messages, sendMessage } = useSocket(
+  const { isConnected, connectionError, messages, sendMessage,addPreviousMessage } = useSocket(
     roomId ?? "",
     accessToken
   );
@@ -32,7 +33,19 @@ const ChatRoom = () => {
   useEffect(() => {
     if (!roomName || !roomId) {
       router.push("/");
+      return;
     }
+   
+    //get all message
+    fetchRooms(roomId).then(data=>{
+      addPreviousMessage(data)
+      //console.log(data)
+    }).catch((error)=>{
+      console.log(error)
+      
+    })
+   
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [roomName, roomId, router]);
 
   useEffect(() => {
@@ -40,10 +53,13 @@ const ChatRoom = () => {
       messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
     }
   }, [messages]);
-  if (!session) {
-    router.push("/");
-    return;
-  }
+
+  useEffect(() => {
+    if (!session) {
+      router.push("/");
+    }
+  }, [session, router]);
+
 
   const handleSendMessage = (e: React.FormEvent) => {
     e.preventDefault();

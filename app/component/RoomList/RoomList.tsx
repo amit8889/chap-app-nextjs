@@ -4,13 +4,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import RoomCard from "../RoomCard/RoomCard"; // Adjust path if needed
 import Link from "next/link";
-
-
-interface Room {
-  id: number;
-  name: string;
-  description: string;
-}
+import {RoomList as Room} from "../../types/Room"
 
 
 const SkeletonLoader = () => (

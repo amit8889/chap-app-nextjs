@@ -1,5 +1,5 @@
 "use client";
-
+import {useEffect} from 'react'
 import { signIn, useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 
@@ -8,7 +8,7 @@ interface AuthButtonProps {
   bgColor: string;
   hoverColor: string;
   label: string;
-  icon: React.ReactNode;  // ReactNode allows any valid JSX/React component as a type
+  icon: React.ReactNode;
 }
 
 
@@ -16,10 +16,15 @@ export default function Login() {
   const { data: session } = useSession();
   const router = useRouter();
 
+  useEffect(() => {
+    if (session) {
+      router.push("/");
+    }
+  }, [session, router]);
+
+  
   if (session) {
-    console.log(session);
-    router.push("/");
-    return null;
+    return null
   }
 
   return (

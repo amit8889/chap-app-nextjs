@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import { useEffect, useState } from 'react';
 import { io, Socket } from 'socket.io-client';
@@ -15,12 +15,6 @@ const useSocket = (roomId: string,token: string | undefined) => {
     if (!roomId || !token) {
       return;
     }
-    fetchRooms(roomId).then((data=>{
-      setMessages([...data,...messages])
-      console.log(data)
-    })).catch((error)=>{
-      
-    })
     // connsct socket
     socket = io('http://localhost:3000', {
       reconnection: false, 
@@ -76,16 +70,19 @@ const useSocket = (roomId: string,token: string | undefined) => {
       socket.off('message');
       socket.off("room_joined")
       socket.disconnect()
+      setMessages([])
     };
   }, [roomId,token]);
+
+  const addPreviousMessage = (message:Messages[])=>{
+    setMessages([...message,...messages])
+  }
 
   
   const sendMessage = (message: string,email:string,name:string,image:string) => {
     if (!isConnected || !socket) {
       return; 
     }
-    // console.log("messages send pre: ",messages)
-    // console.log("messages send no: ",{ text: message ,email:email,name:name,cd:new Date(),mt :"message"})
     setMessages((prevMessages) => [...prevMessages, { text: message ,email:email,name:name,cd:new Date(),mt :"message",image:image}]);
     socket.emit('message', {
       text: message,
@@ -93,7 +90,7 @@ const useSocket = (roomId: string,token: string | undefined) => {
     });
   };
 
-  return { isConnected, connectionError, messages, sendMessage };
+  return { isConnected,addPreviousMessage, connectionError, messages, sendMessage };
 };
 
 export default useSocket;
