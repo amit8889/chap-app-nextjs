@@ -12,6 +12,7 @@ export interface SocketUser {
     iat: number;
     exp: number;
     roomId: string; 
+    image?:string
   }
   
   

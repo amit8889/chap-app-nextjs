@@ -7,4 +7,5 @@ export interface Messages {
   mt?: string; 
   email?: string;
   roomId?:string;
+  image?:string
 }

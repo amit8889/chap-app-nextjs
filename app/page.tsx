@@ -1,7 +1,7 @@
 'use client';
 
 import RoomList from './component/RoomList/RoomList';
-import useAuthRedirect from './hooks/useAuthHook.ts'
+import useAuthRedirect from './hooks/useAuthHook'
 const Home: React.FC = () => {
   const {session, status} = useAuthRedirect()
   if(!session){

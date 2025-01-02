@@ -1,8 +1,9 @@
-import type { NextConfig } from "next";
-
-const nextConfig: NextConfig = {
-  /* config options here */
-  reactStrictMode:false
+/** @type {import('next').NextConfig} */
+const nextConfig = {
+  images: {
+    domains: ['lh3.googleusercontent.com',"avatars.githubusercontent.com"], 
+  },
+  reactStrictMode: false,
 };
 
 export default nextConfig;

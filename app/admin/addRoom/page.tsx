@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import axios, { AxiosError } from "axios";
 import { useRouter } from "next/navigation";
-import useAuthRedirect from "../../hooks/useAuthHook.ts"
+import useAuthRedirect from "../../hooks/useAuthHook"
 
 interface RoomForm {
   name: string;

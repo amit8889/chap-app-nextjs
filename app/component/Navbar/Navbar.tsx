@@ -1,7 +1,8 @@
+"use client";
 import React from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import useAuthRedirect from "../../hooks/useAuthHook.ts"
+import useAuthRedirect from "../../hooks/useAuthHook"
 const Navbar: React.FC = () => {
   const {session, status} = useAuthRedirect()
   if(!session){

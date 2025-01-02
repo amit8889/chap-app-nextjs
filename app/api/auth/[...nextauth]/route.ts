@@ -1,7 +1,19 @@
 import NextAuth from "next-auth";
 import GithubProvider from "next-auth/providers/github";
 import GoogleProvider from "next-auth/providers/google";
-import jwt from "jsonwebtoken"
+import jwt from "jsonwebtoken";
+import { Session } from "next-auth";
+import { JWT } from "next-auth/jwt";
+
+// Custom Session type with accessToken as required
+interface CustomSession extends Session {
+  accessToken: string;
+}
+
+// Custom JWT type, accessToken is optional
+interface CustomJWT extends JWT {
+  accessToken?: string;
+}
 
 const handler = NextAuth({
   providers: [
@@ -23,21 +35,21 @@ const handler = NextAuth({
             id: user.id,
             email: user.email,
             name: user.name,
+            image: user.image,
           },
           process.env.JWT_SECRET || "your-jwt-secret",
           {
-            expiresIn: "1h", 
+            expiresIn: "1h",
           }
         );
-
         token.accessToken = accessToken;
       }
       return token;
     },
-
     async session({ session, token }) {
-      if (token?.accessToken) {
-        session.accessToken = token.accessToken;
+      // Ensure session is treated as CustomSession with accessToken
+      if (token?.accessToken && typeof token.accessToken == 'string') {
+        (session as CustomSession).accessToken = token.accessToken;
       }
       return session;
     },

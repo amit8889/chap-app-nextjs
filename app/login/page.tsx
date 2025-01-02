@@ -3,6 +3,15 @@
 import { signIn, useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 
+interface AuthButtonProps {
+  provider: string;
+  bgColor: string;
+  hoverColor: string;
+  label: string;
+  icon: React.ReactNode;  // ReactNode allows any valid JSX/React component as a type
+}
+
+
 export default function Login() {
   const { data: session } = useSession();
   const router = useRouter();
@@ -62,7 +71,8 @@ export default function Login() {
   );
 }
 
-function AuthButton({ provider, bgColor, hoverColor, label, icon }) {
+
+function AuthButton({ provider, bgColor, hoverColor, label, icon }: AuthButtonProps) {
   return (
     <button
       onClick={() => signIn(provider)}

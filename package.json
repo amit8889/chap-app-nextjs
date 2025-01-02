@@ -12,7 +12,7 @@
     "start-server": "node dist/server.js",
     "lint": "next lint",
     "build:socket": "next build && tsc --project tsconfig.server.json",
-    "start:socket": "node dist/server.mjs"
+    "start:socket": "node dist/server.js"
   },
   "dependencies": {
     "@types/jsonwebtoken": "^9.0.7",

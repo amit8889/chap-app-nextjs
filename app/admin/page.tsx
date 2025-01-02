@@ -3,7 +3,7 @@
 import React from 'react';
 import RoomList from '../component/RoomList/RoomList';
 import Link from 'next/link';
-import useAuthRedirect from "../hooks/useAuthHook.ts"
+import useAuthRedirect from "../hooks/useAuthHook"
 const AdminDashboard: React.FC = () => {
   const {session, status} = useAuthRedirect()
   console.log(session)

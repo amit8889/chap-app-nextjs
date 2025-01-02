@@ -1,14 +1,15 @@
-"use client";
 
+
+import { ReactNode } from "react";
 import Navbar from "./component/Navbar/Navbar";
-import "./globals.css";
 import SessionWrapper from "./component/SessionWrapper/SessionWrapper";
+import "./globals.css";
+
+// Directly typing the props in the function definition
 export default function RootLayout({
   children,
-  session,
 }: {
-  children: React.ReactNode;
-  session: unknown;
+  children: ReactNode;
 }) {
   return (
     <html lang="en">

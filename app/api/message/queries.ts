@@ -8,6 +8,7 @@ export interface Messages {
     cd?: Date; // Optional field
     mt?: string; // Optional field (could be 'msg', 'notification', etc.)
     email?: string; // Optional, for email of the sender
+    roomId:string
   }
 export async function addMessage(params: Messages) {
     await executeQuery(

@@ -14,6 +14,7 @@ export interface Messages {
   mt?: string; 
   email?: string;
   roomId?:string;
+  image?:string;
 }
 
 
@@ -72,7 +73,7 @@ app.prepare().then(() => {
   io.on("connection", (socket: Socket) => {
     console.log("Socket connected:", socket.id);
     // Retrieve user details and roomId
-    const { email, name, roomId } = socket.user;
+    const { email, name, roomId,image="" } = socket.user;
     console.log("User:", email, name, "Room ID:", roomId);
 
     // Join the user to the room
@@ -84,7 +85,7 @@ app.prepare().then(() => {
         text: `${name} has joined the room.`,
         cd: new Date(),
         mt: "notification",
-        roomId:roomId as string
+        roomId:roomId as string,
       }
       socket.to(roomId).emit("message", msg);
 
@@ -98,7 +99,10 @@ app.prepare().then(() => {
         cd: new Date(),
         mt: "message",
         roomId:roomId as string,
-        email:email}
+        email:email,
+        image:image,
+        name:name
+      }
       // addMessage({roomId:roomId as string, text:text,email:email})
       if (roomId) {
         socket.to(roomId).emit("message", msg);
@@ -111,7 +115,7 @@ app.prepare().then(() => {
         text: `${name} has left the room.`,
         cd: new Date(),
         mt: "notification",
-        roomId:roomId as string
+        roomId:roomId as string,
       }
 
       // Optionally notify room users when a user disconnects

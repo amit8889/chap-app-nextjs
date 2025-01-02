@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { io, Socket } from 'socket.io-client';
-import {Messages} from "../types/Messages.ts"
+import {Messages} from "../types/Messages"
 
 let socket: Socket | null = null;
 
@@ -16,7 +16,7 @@ const useSocket = (roomId: string,token: string | undefined) => {
       return;
     }
     // connsct socket
-    socket = io.connect('http://localhost:3000', {
+    socket = io('http://localhost:3000', {
       reconnection: false, 
       query: {
         token: token,
@@ -51,7 +51,7 @@ const useSocket = (roomId: string,token: string | undefined) => {
 
     socket.on('message', (message: Messages) => {
       // console.log("Message received pre: ", messages);
-      // console.log("Message received: cur  ", message);
+    //   console.log("Message received: cur  ", message);
       setMessages((prevMessages) => [
         ...prevMessages,
         message,
@@ -61,6 +61,9 @@ const useSocket = (roomId: string,token: string | undefined) => {
     socket.emit("room_join","")
 
     return () => {
+      if(socket==null){
+        return;
+      }
       socket.off('connect');
       socket.off('connect_error');
       socket.off('disconnect');
@@ -71,16 +74,16 @@ const useSocket = (roomId: string,token: string | undefined) => {
   }, [roomId,token]);
 
   
-  const sendMessage = (message: string,email:string,name:string) => {
+  const sendMessage = (message: string,email:string,name:string,image:string) => {
     if (!isConnected || !socket) {
       return; 
     }
     // console.log("messages send pre: ",messages)
     // console.log("messages send no: ",{ text: message ,email:email,name:name,cd:new Date(),mt :"message"})
-    setMessages((prevMessages) => [...prevMessages, { text: message ,email:email,name:name,cd:new Date(),mt :"message"}]);
+    setMessages((prevMessages) => [...prevMessages, { text: message ,email:email,name:name,cd:new Date(),mt :"message",image:image}]);
     socket.emit('message', {
       text: message,
-      roomId,
+      roomId
     });
   };
 
