@@ -39,7 +39,7 @@ const handler = NextAuth({
           },
           process.env.JWT_SECRET || "your-jwt-secret",
           {
-            expiresIn: "1h",
+            expiresIn: "90d",
           }
         );
         token.accessToken = accessToken;
